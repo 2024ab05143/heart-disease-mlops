@@ -72,9 +72,19 @@ if __name__ == "__main__":
     print("Preparing features and saving scaler...")
     X_train, X_test, y_train, y_test = prepare_data(df)
     
-    # Train Random Forest (Our Best Model)
+   # Train Random Forest
     print("Training Random Forest...")
     rf = RandomForestClassifier(n_estimators=100, random_state=42)
     train_model("Random_Forest", rf, X_train, X_test, y_train, y_test)
+    
+    # --- ADDED: Save the model explicitly for Docker ---
+    import os
+    # Create 'model' folder if it doesn't exist
+    os.makedirs("model", exist_ok=True)
+    
+    print("Saving model locally for Docker...")
+    # Save the model object (rf) directly using joblib
+    joblib.dump(rf, "model/model.pkl")
+    print("Files saved: model/model.pkl and scaler.pkl")
     
     print("Training complete.")
